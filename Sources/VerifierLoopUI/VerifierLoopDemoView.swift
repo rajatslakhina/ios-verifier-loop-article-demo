@@ -92,7 +92,7 @@ public struct VerifierLoopDemoView: View {
 
     private func gateRow(_ demo: LoopDemo) -> some View {
         let verdict: LoopVerdict = touchesProjectFile
-            ? demo.gatedOutcome()
+            ? demo.gatedOutcome().verdict
             : demo.allGreenOutcome(for: demo.engineered).verdict
         return HStack(alignment: .top, spacing: 10) {
             Image(systemName: icon(for: verdict))
@@ -139,7 +139,11 @@ public struct VerifierLoopDemoView: View {
                     .foregroundStyle(.secondary)
             }
             Spacer()
-            Text(String(format: "%.4f", signal.passEvidencePerSecond))
+            // Normalise negative zero: -log10(1.0) is -0.0, and printf renders
+            // that as "-0.0000". The rung buys nothing; it does not buy less
+            // than nothing.
+            let density = signal.passEvidencePerSecond == 0 ? 0 : signal.passEvidencePerSecond
+            Text(String(format: "%.4f", density))
                 .font(.caption.monospacedDigit())
                 .foregroundStyle(signal.isInformative ? .primary : .secondary)
         }
