@@ -8,7 +8,7 @@ final class EvidenceLedgerTests: XCTestCase {
     func testEmptyLedgerReturnsPrior() {
         XCTAssertEqual(EvidenceLedger(prior: prior).residualRisk, prior, accuracy: 1e-12)
         XCTAssertEqual(EvidenceLedger(prior: prior).elapsedSeconds, 0)
-        XCTAssertEqual(EvidenceLedger(prior: prior).evidenceDecibans, 0, accuracy: 1e-12)
+        XCTAssertEqual(EvidenceLedger(prior: prior).evidenceBans, 0, accuracy: 1e-12)
     }
 
     func testPriorIsClampedRatherThanTrusted() {
