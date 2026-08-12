@@ -39,13 +39,27 @@ public struct LoopDemo: Sendable {
 
     /// The same all-green engineered run, on a change that also rewrites the
     /// project file. Same evidence, different answer.
-    public func gatedOutcome() -> LoopVerdict {
+    ///
+    /// Returns the ledger too, because the interesting part is not just the
+    /// verdict — it is that `elapsedSeconds` is still zero when it arrives.
+    public func gatedOutcome() -> (verdict: LoopVerdict, ledger: EvidenceLedger) {
         let controller = LoopController(policy: policy, ladder: engineered)
         let change = ProposedChange(
             id: "agent-patch-2",
             touchedClasses: [.sourceCode, .projectFile]
         )
-        return controller.run(change: change, outcomes: [:]).verdict
+        return controller.run(change: change, outcomes: [:])
+    }
+
+    /// Residual risk if `dropped` were removed from the engineered ladder and
+    /// everything else still passed.
+    ///
+    /// Answers the only honest version of "is this rung load-bearing?".
+    public func engineeredRiskWithout(_ dropped: VerificationSignal) -> Double {
+        VerifierLadder(
+            name: "engineered minus \(dropped.id)",
+            signals: engineered.signals.filter { $0.id != dropped.id }
+        ).riskFloor(prior: policy.prior)
     }
 
     /// How much worse the legacy ladder leaves you, as a multiple.
