@@ -58,10 +58,11 @@ public struct EvidenceLedger: Sendable, Equatable {
         return odds / (1.0 + odds)
     }
 
-    /// How far the ladder actually moved belief, in decibans.
+    /// How far the ladder actually moved belief, in bans (base-10 log units,
+    /// also called hartleys — one ban is ten decibans).
     ///
     /// Positive means the evidence argued the change is clean.
-    public var evidenceDecibans: Double {
+    public var evidenceBans: Double {
         var total = 0.0
         for reading in readings {
             let ratio = reading.likelihoodRatio

@@ -117,9 +117,9 @@ public struct VerificationSignal: Sendable, Hashable, Identifiable {
 
     /// How much "the change is clean" evidence a pass buys, per second of wall clock.
     ///
-    /// Measured in decibans (base-10 log units) per second. This is the number
-    /// a ladder should actually be sorted on — not latency, and not the
-    /// subjective confidence anyone has in the suite.
+    /// Measured in bans (base-10 log units, also called hartleys) per second.
+    /// This is the number a ladder should actually be sorted on — not latency,
+    /// and not the subjective confidence anyone has in the suite.
     public var passEvidencePerSecond: Double {
         let ratio = passLikelihoodRatio
         guard ratio > 0, ratio.isFinite else { return 0 }
