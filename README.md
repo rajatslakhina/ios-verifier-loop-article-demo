@@ -50,7 +50,7 @@ Same code, same green, one extra touched file, opposite verdict.
 ## What's in it
 
 - `VerificationSignal` — a rung, described by latency, legibility and its two detection rates. Rejects rates outside `0...1` and non-positive latency at construction.
-- `EvidenceLedger` — Bayesian tally in odds space, with `residualRisk`, `evidenceDecibans`, and `theatreSeconds`.
+- `EvidenceLedger` — Bayesian tally in odds space, with `residualRisk`, `evidenceBans`, and `theatreSeconds`.
 - `VerifierLadder` / `LadderAudit` — ordering by evidence-per-second, theatre detection, `riskFloor`, and the minimal green prefix that clears the bar.
 - `LoopDemo.engineeredRiskWithout(_:)` — the leave-one-out. Three of the four engineered rungs are load-bearing; only the 3-second lint is optional, and the tests say so rather than the prose.
 - `IrreversibilityGate` / `ChangeClass` — which change classes a build-and-test ladder is structurally incapable of observing.
