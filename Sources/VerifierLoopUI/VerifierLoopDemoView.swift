@@ -27,7 +27,10 @@ public struct VerifierLoopDemoView: View {
                 }
             }
             .navigationTitle("Verifier Loop")
+            #if os(iOS)
+            // Unavailable on macOS, and the package supports both.
             .navigationBarTitleDisplayMode(.inline)
+            #endif
         }
     }
 
@@ -48,8 +51,8 @@ public struct VerifierLoopDemoView: View {
             }
 
             Section("Ladders") {
-                ladderRow(demo.legacy, audit: demo.legacyAudit)
-                ladderRow(demo.engineered, audit: demo.engineeredAudit)
+                ladderRow(demo.legacy, audit: demo.legacyAudit, threshold: demo.policy.closeThreshold)
+                ladderRow(demo.engineered, audit: demo.engineeredAudit, threshold: demo.policy.closeThreshold)
             }
 
             Section {
@@ -105,7 +108,7 @@ public struct VerifierLoopDemoView: View {
         .padding(.vertical, 2)
     }
 
-    private func ladderRow(_ ladder: VerifierLadder, audit: LadderAudit) -> some View {
+    private func ladderRow(_ ladder: VerifierLadder, audit: LadderAudit, threshold: Double) -> some View {
         VStack(alignment: .leading, spacing: 6) {
             HStack {
                 Text(ladder.name).font(.subheadline.weight(.semibold))
@@ -119,7 +122,7 @@ public struct VerifierLoopDemoView: View {
                 .foregroundStyle(.secondary)
             HStack(spacing: 8) {
                 badge(
-                    audit.clearsThreshold ? "clears \(LoopFormat.percent(0.05, places: 0))" : "floor \(LoopFormat.percent(audit.riskFloor))",
+                    audit.clearsThreshold ? "clears \(LoopFormat.percent(threshold, places: 0))" : "floor \(LoopFormat.percent(audit.riskFloor))",
                     tint: audit.clearsThreshold ? .green : .red
                 )
                 if audit.theatreSeconds > 0 {
