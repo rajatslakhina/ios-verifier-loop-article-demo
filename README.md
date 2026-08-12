@@ -4,7 +4,7 @@ A small Swift library that answers one question an iOS agent loop cannot current
 
 Loop engineering advice was worked out on stacks where the verifier is a fast, textual, deterministic test run. iOS is not that stack. Its feedback is an Xcode incremental build measured in minutes, a simulator boot, a flaky UI test, and a screenshot that a text-only model cannot read. This library treats the verifier as the designed component it should be, and prices every rung of it.
 
-Article: **(added after publish)**
+Article: **[Six Minutes of Green, and Your iOS Agent Loop Still Has a One-in-Six Problem](https://medium.com/@er.rajatlakhina/six-minutes-of-green-and-your-ios-agent-loop-still-has-a-one-in-six-problem-9937a9002e9d)**
 
 ---
 
