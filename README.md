@@ -52,6 +52,7 @@ Same code, same green, one extra touched file, opposite verdict.
 - `VerificationSignal` — a rung, described by latency, legibility and its two detection rates. Rejects rates outside `0...1` and non-positive latency at construction.
 - `EvidenceLedger` — Bayesian tally in odds space, with `residualRisk`, `evidenceDecibans`, and `theatreSeconds`.
 - `VerifierLadder` / `LadderAudit` — ordering by evidence-per-second, theatre detection, `riskFloor`, and the minimal green prefix that clears the bar.
+- `LoopDemo.engineeredRiskWithout(_:)` — the leave-one-out. Three of the four engineered rungs are load-bearing; only the 3-second lint is optional, and the tests say so rather than the prose.
 - `IrreversibilityGate` / `ChangeClass` — which change classes a build-and-test ladder is structurally incapable of observing.
 - `FailureFingerprint` — normalises absolute paths, simulator UDIDs, timestamps and pointer addresses so the same failure twice reads as *the same failure*, not as progress.
 - `LoopController` — `close` / `runNext` / `rework` / `park` / `escalate`, ordered so that every free check runs before every check that authorises spend.
@@ -79,7 +80,7 @@ swift test
 Stated plainly, because a demo that overclaims its own verification would be an unusually poor advertisement for a library about verification.
 
 - ✅ **`swift build` — passes.** Swift 6.0.3, Linux aarch64. Both library targets compile clean.
-- ✅ **`swift test` — 62 tests, 0 failures.** Every number in the table above is asserted by a test, not typed by hand: the 380s/128s wall clocks, the 16.6%/3.8% risk floors, the exactly-1.0 screenshot ratio, the gate firing at zero elapsed seconds.
+- ✅ **`swift test` — 73 tests, 0 failures.** Every number in the table above is asserted by a test, not typed by hand: the 380s/128s wall clocks, the 16.6%/3.8% risk floors, the exactly-1.0 screenshot ratio, the gate firing at zero elapsed seconds. `ArticleClaimsTests` exists specifically so the published write-up and this code cannot drift apart silently.
 - ✅ **`Demo.xcodeproj/project.pbxproj` structurally audited** — braces 32/32, parens 24/24, 22 objects defined, zero dangling references. A shared `Demo.xcscheme` is committed so the scheme is selectable on a fresh clone.
 - ✅ **No `.executableTarget`.** `Package.swift` declares library and test targets only; the runnable app lives exclusively in `Demo.xcodeproj`.
 - ❌ **NOT run on the iOS Simulator, and there are no screenshots in this repo.** The build was produced in an unattended scheduled run with no macOS shell (no `xcodebuild`, no `simctl`) and no way to obtain interactive Xcode access. `VerifierLoopUI`'s body is guarded by `#if canImport(SwiftUI)`, so the Linux build compiles it to an empty module — **the SwiftUI code in this repo has been reviewed by hand but not compiled.** If you clone it and the demo view does not build, that is the gap, and a pull request is welcome.
