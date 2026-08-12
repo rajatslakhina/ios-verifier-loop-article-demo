@@ -2,7 +2,7 @@
 
 A small Swift library that answers one question an iOS agent loop cannot currently answer: **when the run is green, what is that actually worth?**
 
-Loop engineering advice — trigger, topology, verifier, stop rules, spend cap, sign-off gate — was written against stacks where the verifier is a fast, textual, deterministic test run. iOS is not that stack. Its feedback is a 90-second incremental build, a simulator boot, a flaky UI test, and a screenshot that a text-only model cannot read. This library treats the verifier as the designed component it should be, and prices every rung of it.
+Loop engineering advice was worked out on stacks where the verifier is a fast, textual, deterministic test run. iOS is not that stack. Its feedback is an Xcode incremental build measured in minutes, a simulator boot, a flaky UI test, and a screenshot that a text-only model cannot read. This library treats the verifier as the designed component it should be, and prices every rung of it.
 
 Article: **(added after publish)**
 
@@ -10,14 +10,14 @@ Article: **(added after publish)**
 
 ## The result it produces
 
-Two ladders. Same prior (35% of agent-authored diffs arrive defective), same bar (close under 5% residual risk).
+Two ladders. Same prior (35% of agent-authored diffs arrive defective), same bar (close under 5% residual risk). The prior and the per-rung detection rates are illustrative — plausible for a mid-size iOS app, not measured from anyone's CI. The arithmetic is the point; your numbers go in the same slots.
 
 | Ladder | Rungs | Wall clock | Residual risk when fully green | Verdict |
 |---|---|---|---|---|
 | Legacy | lint → build → XCUITest smoke → simulator screenshot | **380s** | **16.6%** | Parks. Cannot reach the bar. |
 | Engineered | lint → build → unit suite → snapshot diff | **128s** | **3.8%** | Closes. |
 
-Three times less wall clock, four times less residual risk, and only one of them is ever allowed to land a change unattended.
+**2.97× the wall clock for 4.4× the residual risk** — and only one of them is ever allowed to land a change unattended.
 
 The screenshot rung is the sharp edge. Its sensitivity equals its false-alarm rate, so its pass contributes a likelihood ratio of **exactly 1.0** — it moves belief by nothing at all while costing 95 seconds, a quarter of the legacy ladder's runtime. `VerifierLadder.theatreSeconds` prices that directly.
 
@@ -60,7 +60,7 @@ Same code, same green, one extra touched file, opposite verdict.
 
 ## Running it
 
-```
+```sh
 git clone https://github.com/rajatslakhina/ios-verifier-loop-article-demo.git
 cd ios-verifier-loop-article-demo
 open Demo.xcodeproj      # pick any iOS Simulator, then Build & Run
@@ -70,7 +70,7 @@ One repo, no second checkout: `Demo.xcodeproj` consumes the library through a lo
 
 Library and tests on their own:
 
-```
+```sh
 swift build
 swift test
 ```
@@ -79,7 +79,7 @@ swift test
 
 Stated plainly, because a demo that overclaims its own verification would be an unusually poor advertisement for a library about verification.
 
-- ✅ **`swift build` — passes.** Swift 6.0.3, Linux aarch64. Both library targets compile clean.
+- ✅ **`swift build` — passes.** Swift 6.0.3, Linux aarch64. `VerifierLoop` compiles clean; `VerifierLoopUI` is guarded by `#if canImport(SwiftUI)`, so on Linux it compiles to an empty module (see the last bullet).
 - ✅ **`swift test` — 73 tests, 0 failures.** Every number in the table above is asserted by a test, not typed by hand: the 380s/128s wall clocks, the 16.6%/3.8% risk floors, the exactly-1.0 screenshot ratio, the gate firing at zero elapsed seconds. `ArticleClaimsTests` exists specifically so the published write-up and this code cannot drift apart silently.
 - ✅ **`Demo.xcodeproj/project.pbxproj` structurally audited** — braces 32/32, parens 24/24, 22 objects defined, zero dangling references. A shared `Demo.xcscheme` is committed so the scheme is selectable on a fresh clone.
 - ✅ **No `.executableTarget`.** `Package.swift` declares library and test targets only; the runnable app lives exclusively in `Demo.xcodeproj`.
