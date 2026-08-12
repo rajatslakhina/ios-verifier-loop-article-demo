@@ -19,7 +19,7 @@ final class LadderTests: XCTestCase {
         XCTAssertNil(legacy.minimalGreenPrefix(threshold: threshold, prior: prior))
     }
 
-    func testEngineeredLadderClearsThresholdAndNeedsAllFourRungs() throws {
+    func testMinimalGreenPrefixRunsAllFourRungsInThisOrder() throws {
         let engineered = try IOSSignalCatalog.engineeredLadder()
         XCTAssertTrue(engineered.canReach(threshold: threshold, prior: prior))
         let prefix = engineered.minimalGreenPrefix(threshold: threshold, prior: prior)

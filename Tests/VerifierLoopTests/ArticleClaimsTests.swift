@@ -139,7 +139,7 @@ final class ArticleClaimsTests: XCTestCase {
         XCTAssertTrue(ledger.readings.isEmpty)
     }
 
-    /// Guards the "62 tests" style claim from silently going stale: the demo
+    /// Guards the "73 tests" style claim from silently going stale: the demo
     /// surface the write-up describes is exactly these six public entry points.
     func testDemoSurfaceIsWhatThePieceDescribes() throws {
         let demo = try LoopDemo()
