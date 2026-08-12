@@ -33,10 +33,12 @@ final class LoopDemoTests: XCTestCase {
 
     func testGatedOutcomeEscalatesEvenThoughTheLadderIsIdentical() throws {
         let demo = try LoopDemo()
-        guard case let .escalate(requirement) = demo.gatedOutcome() else {
-            return XCTFail("expected escalate, got \(demo.gatedOutcome())")
+        let outcome = demo.gatedOutcome()
+        guard case let .escalate(requirement) = outcome.verdict else {
+            return XCTFail("expected escalate, got \(outcome.verdict)")
         }
         XCTAssertEqual(requirement.blockedBy, [.projectFile])
+        XCTAssertEqual(outcome.ledger.elapsedSeconds, 0)
     }
 
     func testAllGreenOutcomesMatchTheTwoStories() throws {
